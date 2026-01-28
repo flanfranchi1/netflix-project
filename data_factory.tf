@@ -39,7 +39,7 @@ resource "azurerm_data_factory_dataset_delimited_text" "ds_sink_datalake" {
   data_factory_id = azurerm_data_factory.data_factory.id
   linked_service_name = azurerm_data_factory_linked_service_data_lake_storage_gen2.source_datalake.name
   azure_blob_fs_location {
-    file_system = "bronze"
+    file_system = "raw"
     filename = each.value
   }
   column_delimiter = ","
