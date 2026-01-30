@@ -44,7 +44,7 @@ resource "azurerm_role_assignment" "dbx_storage_access" {
 resource "databricks_cluster" "dbz_single_node" {
  cluster_name            = "netflix-lab-cluster"
   spark_version           = "13.3.x-scala2.12"
-  node_type_id            = "Standard_D4s_v3"
+  node_type_id            = "Standard_DS3_v2"
   autotermination_minutes = 10
   spark_conf = {
     "spark.databricks.cluster.profile" = "singleNode"

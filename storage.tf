@@ -1,6 +1,6 @@
 resource "azurerm_resource_group" "rg_netflix" {
   name = "netflix_project"
-  location = "East US"
+  location = "CENTRALUS"
 }
 
 resource "azurerm_storage_account" "datalake" {
