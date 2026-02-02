@@ -1,8 +1,15 @@
-resource "azurerm_data_factory_linked_service_web" "source_github" {
-  name = "github-source-fl2026"
+resource "azurerm_data_factory_linked_custom_service" "ls_github_http" {
+  name            = "ls_github_http"
   data_factory_id = azurerm_data_factory.data_factory.id
-  url = "https://raw.githubusercontent.com/anshlambagit/Netflix_Azure_Data_Engineering_Project/main/"
-  authentication_type = "Anonymous"
+  type            = "HttpServer"
+
+  type_properties_json = <<JSON
+{
+    "url": "https://raw.githubusercontent.com/anshlambagit/Netflix_Azure_Data_Engineering_Project/main/",
+    "enableServerCertificateValidation": true,
+    "authenticationType": "Anonymous"
+}
+JSON
 }
 
 resource "azurerm_data_factory_linked_service_data_lake_storage_gen2" "source_datalake" {
@@ -19,7 +26,7 @@ resource "azurerm_data_factory_dataset_delimited_text" "ds_source_github" {
   for_each = toset(local.github_csv_input_files)
   name                = "ds_github_${replace(each.value, ".", "_")}"
   data_factory_id = azurerm_data_factory.data_factory.id
-  linked_service_name = azurerm_data_factory_linked_service_web.source_github.name
+  linked_service_name = azurerm_data_factory_linked_custom_service.ls_github_http.name
   http_server_location {
     relative_url = each.value
     path = "RawData_AND_Notebooks/"
@@ -31,6 +38,7 @@ resource "azurerm_data_factory_dataset_delimited_text" "ds_source_github" {
   quote_character = "\""
   escape_character = "\\"
   first_row_as_header = true
+  depends_on = [azurerm_data_factory_linked_custom_service.ls_github_http]
 }
 
 resource "azurerm_data_factory_dataset_delimited_text" "ds_sink_datalake" {
