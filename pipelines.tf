@@ -67,7 +67,7 @@ resource "azurerm_data_factory_trigger_schedule" "daily_trigger" {
 
   interval   = 1
   frequency  = "Day"
-  start_time = "2026-02-02T21:55:00Z"
+  start_time = "2026-02-03T13:12:00Z"
 
   activated = true
 }
